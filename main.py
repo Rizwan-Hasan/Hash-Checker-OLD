@@ -4,7 +4,7 @@ import os
 import sys
 import time
 import threading
-import icons.resources
+import resources
 from HashChecker import checkHash
 import PyQt5
 from PyQt5 import uic, sip, QtSvg
