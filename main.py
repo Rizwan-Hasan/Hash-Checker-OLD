@@ -2,16 +2,13 @@
 
 import os
 import sys
-import time
-import threading
 import resources
 from HashChecker import checkHash
 import PyQt5
-from PyQt5 import uic, sip, QtSvg
+from PyQt5 import uic, sip
 from PyQt5.QtGui import QIcon, QPixmap, QMovie
-from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox
-from PyQt5.QtWidgets import QFileDialog, QDesktopWidget
+from PyQt5.QtWidgets import QFileDialog, QDesktopWidget, QTextEdit
 from PyQt5.QtCore import pyqtSlot, pyqtSignal, QThread
 
 appFolder = os.path.dirname(sys.argv[0]) + '/'  # Application root location
@@ -34,10 +31,15 @@ class MainWindow(QMainWindow):
         self.move(qtRectangle.topLeft())
 
     def hashCalcUI(self):
+        # Making window centered
+        self.makeWindowCenter()
         # Window customizing
         self.setWindowTitle('Hash Calculator')
         self.setWindowIcon(QIcon(':icon/icon.png'))
-        self.makeWindowCenter()
+        # Textbox customizing
+        self.textBoxMD5.setStyleSheet("""QTextEdit { font-size: 15px; }""")
+        self.textBoxSHA256.setStyleSheet("""QTextEdit { font-size: 15px; }""")
+        self.textBoxSHA512.setStyleSheet("""QTextEdit { font-size: 15px; }""")
         # Buttons actions
         self.openFileButton.clicked.connect(self.openFileDialog)
         self.removeFileButton.clicked.connect(self.removeFileButton_OnClick)
