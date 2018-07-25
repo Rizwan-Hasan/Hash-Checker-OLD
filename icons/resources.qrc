@@ -1,0 +1,17 @@
+<RCC>
+  <qresource prefix="folder_open">
+    <file>folder_open.png</file>
+  </qresource>
+  <qresource prefix="icon">
+    <file>icon.png</file>
+  </qresource>
+  <qresource prefix="done">
+    <file>done.png</file>
+  </qresource>
+  <qresource prefix="loading">
+    <file>loading.gif</file>
+  </qresource>
+  <qresource prefix="delete_file">
+    <file>delete_file.png</file>
+  </qresource>
+</RCC>
