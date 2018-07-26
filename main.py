@@ -22,7 +22,7 @@ class MainWindow(QMainWindow):
         self.currentFileLoc = None
         self.doneIcon = QPixmap(':/done/done.png')
         self.loading = QMovie(':loading/loading.gif')
-        self.hashCalcUI()
+        self.hashCheckerUI()
 
     def makeWindowCenter(self):
         qtRectangle = self.frameGeometry()
@@ -30,7 +30,7 @@ class MainWindow(QMainWindow):
         qtRectangle.moveCenter(centerPoint)
         self.move(qtRectangle.topLeft())
 
-    def hashCalcUI(self):
+    def hashCheckerUI(self):
         # Making window centered
         self.makeWindowCenter()
         # Window customizing
@@ -43,17 +43,43 @@ class MainWindow(QMainWindow):
         # Buttons actions
         self.openFileButton.clicked.connect(self.openFileDialog)
         self.removeFileButton.clicked.connect(self.removeFileButton_OnClick)
+        self.clipboardButton.clicked.connect(self.clipboardText)
+        # Adding Place Holder Text
+        self.textBoxMD5.setPlaceholderText('...')
+        self.textBoxSHA256.setPlaceholderText('...')
+        self.textBoxSHA512.setPlaceholderText('...')
+        self.textBoxCheck.setPlaceholderText('Paste your hash here to match with or leave empty')
 
     @pyqtSlot()
-    # Close event
-    def closeEvent(self, event):
-        reply = QMessageBox.question(self, 'Message', "Are you sure to quit?\nAll changes will be lost.", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
-        if reply == QMessageBox.Yes:
-            self.statusBar().showMessage('Exited.')
-            event.accept()
+    # Clipboard Text
+    def clipboardText(self):
+        try:
+            self.clipboardButton.clicked.disconnect()
+        except:
+            pass
+        clipText = QApplication.clipboard().text()
+        clipText = clipText.strip()
+        self.textBoxCheck.setText(clipText)
+
+        if(len(clipText) == 32):
+            if(self.textBoxMD5.toPlainText() == clipText):
+                print('Mathched MD5')
+            else:
+                print('MD5 not matched')
+        elif(len(clipText) == 64):
+            if(self.textBoxSHA256.toPlainText() == clipText):
+                print('Mathched SHA256')
+            else:
+                print('SHA256 not matched')
+        elif(len(clipText) == 128):
+            if(self.textBoxSHA512.toPlainText() == clipText):
+                print('Mathched SHA512')
+            else:
+                print('SHA512 not matched')
         else:
-            self.statusBar().showMessage('Welcome back.')
-            event.ignore()
+            print('Wrong Hashtype')
+
+        self.clipboardButton.clicked.connect(self.clipboardText)
 
     # File Dialogs
 
@@ -108,7 +134,7 @@ class MainWindow(QMainWindow):
         except:
             pass
         self.currentFileLoc = None
-        self.openFileButton.setText('Click here to open a file')
+        self.openFileButton.setText('Click to open a file')
         self.textBoxMD5.setText("")
         self.textBoxSHA256.setText("")
         self.textBoxSHA512.setText("")

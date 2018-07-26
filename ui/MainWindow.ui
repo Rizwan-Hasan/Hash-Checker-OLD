@@ -7,23 +7,26 @@
     <x>0</x>
     <y>0</y>
     <width>490</width>
-    <height>492</height>
+    <height>505</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
     <width>490</width>
-    <height>320</height>
+    <height>505</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>490</width>
-    <height>900</height>
+    <height>505</height>
    </size>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
+  </property>
+  <property name="documentMode">
+   <bool>false</bool>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QPushButton" name="openFileButton">
@@ -36,7 +39,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Click here to open a file</string>
+     <string>Click to open a file</string>
     </property>
    </widget>
    <widget class="QLabel" name="labelFile">
@@ -265,6 +268,68 @@
      <bool>true</bool>
     </property>
    </widget>
+   <widget class="QTextEdit" name="textBoxCheck">
+    <property name="geometry">
+     <rect>
+      <x>110</x>
+      <y>370</y>
+      <width>331</width>
+      <height>70</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="clearButton">
+    <property name="geometry">
+     <rect>
+      <x>110</x>
+      <y>450</y>
+      <width>88</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Clear</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="clipboardButton">
+    <property name="geometry">
+     <rect>
+      <x>210</x>
+      <y>450</y>
+      <width>131</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Paste clipboard</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="checkButton">
+    <property name="geometry">
+     <rect>
+      <x>350</x>
+      <y>450</y>
+      <width>91</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Check</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>380</y>
+      <width>61</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;HashBox&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -281,5 +346,22 @@
  <resources>
   <include location="../icons/resources.qrc"/>
  </resources>
- <connections/>
+ <connections>
+  <connection>
+   <sender>clearButton</sender>
+   <signal>clicked()</signal>
+   <receiver>textBoxCheck</receiver>
+   <slot>clear()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>160</x>
+     <y>486</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>164</x>
+     <y>442</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>
