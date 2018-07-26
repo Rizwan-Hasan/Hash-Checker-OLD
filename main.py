@@ -43,10 +43,6 @@ class MainWindow(QMainWindow):
         # Buttons actions
         self.openFileButton.clicked.connect(self.openFileDialog)
         self.removeFileButton.clicked.connect(self.removeFileButton_OnClick)
-        self.labelDoneMD5.setPixmap(self.doneIcon)
-        self.labelDoneSHA256.setPixmap(self.doneIcon)
-        self.labelDoneSHA512.setPixmap(self.doneIcon)
-        self.textBoxMD5.setText('gg')
 
     @pyqtSlot()
     # Close event
