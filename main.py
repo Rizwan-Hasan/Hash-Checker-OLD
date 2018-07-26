@@ -34,7 +34,7 @@ class MainWindow(QMainWindow):
         # Making window centered
         self.makeWindowCenter()
         # Window customizing
-        self.setWindowTitle('Hash Calculator')
+        self.setWindowTitle('Hash Checker')
         self.setWindowIcon(QIcon(':icon/icon.png'))
         # Textbox customizing
         self.textBoxMD5.setStyleSheet("""QTextEdit { font-size: 15px; }""")
