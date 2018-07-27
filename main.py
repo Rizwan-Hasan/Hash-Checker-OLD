@@ -3,6 +3,8 @@
 import os
 import sys
 import resources
+import pyperclip
+from functools import partial
 from HashChecker import checkHash
 import PyQt5
 from PyQt5 import uic, sip
@@ -51,6 +53,10 @@ class MainWindow(QMainWindow):
         self.removeFileButton.clicked.connect(self.removeFileButton_OnClick)
         self.clipboardButton.clicked.connect(self.clipboardText)
         self.checkButton.clicked.connect(self.checkButton_OnClick)
+        # Clipboard Buttons actions
+        self.clipboardMD5Button.clicked.connect(partial(self.clipboardButtonActions_OnClick, 'md5'))
+        self.clipboardSHA256Button.clicked.connect(partial(self.clipboardButtonActions_OnClick, 'sha256'))
+        self.clipboardSHA512Button.clicked.connect(partial(self.clipboardButtonActions_OnClick, 'sha512'))
         # Adding Place Holder Text
         self.textBoxMD5.setPlaceholderText('...')
         self.textBoxSHA256.setPlaceholderText('...')
@@ -67,6 +73,34 @@ class MainWindow(QMainWindow):
             temp.write(self.currentFileLoc)
         self.start_Hash_Calculation()
         print(argFile)
+
+    # Clipboard Buttons Action Functions
+
+    def clipboardButtonActions_OnClick(self, hashName):
+        try:
+            self.clipboardMD5Button.clicked.disconnect()
+            self.clipboardSHA256Button.clicked.disconnect()
+            self.clipboardSHA512Button.clicked.disconnect()
+        except:
+            pass
+        if(self.currentFileLoc != None):
+            if(hashName == 'md5'):
+                clipText = self.textBoxMD5.toPlainText()
+                pyperclip.copy(clipText.strip())
+                self.statusBar().showMessage('MD5sum has been copied to clipboard')
+            elif(hashName == 'sha256'):
+                clipText = self.textBoxSHA256.toPlainText()
+                pyperclip.copy(clipText.strip())
+                self.statusBar().showMessage('SHA256sum has been copied to clipboard')
+            elif(hashName == 'sha512'):
+                clipText = self.textBoxSHA512.toPlainText()
+                pyperclip.copy(clipText.strip())
+                self.statusBar().showMessage('SHA512sum has been copied to clipboard')
+        else:
+            pass
+        self.clipboardMD5Button.clicked.connect(partial(self.clipboardButtonActions_OnClick, 'md5'))
+        self.clipboardSHA256Button.clicked.connect(partial(self.clipboardButtonActions_OnClick, 'sha256'))
+        self.clipboardSHA512Button.clicked.connect(partial(self.clipboardButtonActions_OnClick, 'sha512'))
 
     # Clipboard Text
 
@@ -186,7 +220,7 @@ class MainWindow(QMainWindow):
 
 
 class Hashing(QThread):
-
+    # Hash Calculation Background Process
     signalMD5 = pyqtSignal(str)
     signalSHA256 = pyqtSignal(str)
     signalSHA512 = pyqtSignal(str)
@@ -196,15 +230,15 @@ class Hashing(QThread):
         with open('temp486.temp', 'r') as temp:
             fileLoc = temp.read()
         os.remove('temp486.temp')
-        for i in range(1):
-            self.signalMD5.emit(checkHash(fileLoc, 'md5'))
-            self.signalStopLoading.emit('stop_MD5')
-        for i in range(1):
-            self.signalSHA256.emit(checkHash(fileLoc, 'sha256'))
-            self.signalStopLoading.emit('stop_SHA256')
-        for i in range(1):
-            self.signalSHA512.emit(checkHash(fileLoc, 'sha512'))
-            self.signalStopLoading.emit('stop_SHA512')
+        # Calculating MD5sum
+        self.signalMD5.emit(checkHash(fileLoc, 'md5'))
+        self.signalStopLoading.emit('stop_MD5')
+        # Calculating SHA256sum
+        self.signalSHA256.emit(checkHash(fileLoc, 'sha256'))
+        self.signalStopLoading.emit('stop_SHA256')
+        # Calculating SHA512sum
+        self.signalSHA512.emit(checkHash(fileLoc, 'sha512'))
+        self.signalStopLoading.emit('stop_SHA512')
 
 
 def main():
