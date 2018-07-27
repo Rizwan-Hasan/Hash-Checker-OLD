@@ -5,6 +5,9 @@
   <qresource prefix="header">
     <file>header.png</file>
   </qresource>
+  <qresource prefix="matched">
+    <file>matched.png</file>
+  </qresource>
   <qresource prefix="icon">
     <file>icon.png</file>
   </qresource>
@@ -16,5 +19,8 @@
   </qresource>
   <qresource prefix="delete_file">
     <file>delete_file.png</file>
+  </qresource>
+  <qresource prefix="error">
+    <file>error.png</file>
   </qresource>
 </RCC>

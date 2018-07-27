@@ -19,9 +19,15 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
         uic.loadUi(appFolder + 'ui/MainWindow.ui', self)
+        # Loaded File Location Variable
         self.currentFileLoc = None
+        # Icons Variables
+        self.icon = QIcon(':icon/icon.png')
         self.doneIcon = QPixmap(':/done/done.png')
+        self.matchedIcon = QPixmap(':/matched/matched.png')
+        self.errorIcon = QPixmap(':/error/error.png')
         self.loading = QMovie(':loading/loading.gif')
+        # Main UI Calling
         self.hashCheckerUI()
 
     def makeWindowCenter(self):
@@ -35,7 +41,7 @@ class MainWindow(QMainWindow):
         self.makeWindowCenter()
         # Window customizing
         self.setWindowTitle('Hash Checker')
-        self.setWindowIcon(QIcon(':icon/icon.png'))
+        self.setWindowIcon(self.icon)
         # Textbox customizing
         self.textBoxMD5.setStyleSheet("""QTextEdit { font-size: 15px; }""")
         self.textBoxSHA256.setStyleSheet("""QTextEdit { font-size: 15px; }""")
@@ -44,11 +50,12 @@ class MainWindow(QMainWindow):
         self.openFileButton.clicked.connect(self.openFileDialog)
         self.removeFileButton.clicked.connect(self.removeFileButton_OnClick)
         self.clipboardButton.clicked.connect(self.clipboardText)
+        self.checkButton.clicked.connect(self.checkButton_OnClick)
         # Adding Place Holder Text
         self.textBoxMD5.setPlaceholderText('...')
         self.textBoxSHA256.setPlaceholderText('...')
         self.textBoxSHA512.setPlaceholderText('...')
-        self.textBoxCheck.setPlaceholderText('Paste your hash here to match with or leave empty')
+        self.textBoxCheck.setPlaceholderText('Paste your hash here to match with or leave empty\nOnly MD5 or SHA256 or SHA512 is allowed')
 
     @pyqtSlot()
     # Clipboard Text
@@ -60,26 +67,48 @@ class MainWindow(QMainWindow):
         clipText = QApplication.clipboard().text()
         clipText = clipText.strip()
         self.textBoxCheck.setText(clipText)
+        self.clipboardButton.clicked.connect(self.clipboardText)
+
+    def checkButton_OnClick(self):
+        try:
+            self.checkButton.clicked.disconnect()
+        except:
+            pass
+        clipText = self.textBoxCheck.toPlainText()
+        clipText = clipText.strip()
 
         if(len(clipText) == 32):
             if(self.textBoxMD5.toPlainText() == clipText):
-                print('Mathched MD5')
+                self.checkButtonDialogue('Congrats 😄😄😄\nMD5sum has matched')
             else:
-                print('MD5 not matched')
+                self.checkButtonDialogue('Sorry 😢😢😢\nMD5sum doesn\'t matched', -1)
         elif(len(clipText) == 64):
             if(self.textBoxSHA256.toPlainText() == clipText):
-                print('Mathched SHA256')
+                self.checkButtonDialogue('Congrats 😄😄😄\nSHA256sum has matched')
             else:
-                print('SHA256 not matched')
+                self.checkButtonDialogue('Sorry 😢😢😢\nSHA256sum doesn\'t matched', -1)
         elif(len(clipText) == 128):
             if(self.textBoxSHA512.toPlainText() == clipText):
-                print('Mathched SHA512')
+                self.checkButtonDialogue('Congrats 😄😄😄\nSHA512sum has matched')
             else:
-                print('SHA512 not matched')
+                self.checkButtonDialogue('Sorry 😢😢😢\nSHA512sum doesn\'t matched', -1)
+        elif(len(clipText) == 0):
+            self.checkButtonDialogue('Error 😠😠😠\nNo hash found', -1)
         else:
-            print('Wrong Hashtype')
+            self.checkButtonDialogue('Error 😤😤😤\nWrong Hashtype', -1)
 
-        self.clipboardButton.clicked.connect(self.clipboardText)
+        self.checkButton.clicked.connect(self.checkButton_OnClick)
+
+    def checkButtonDialogue(self, message, checkResult=0):
+        msgBox = QMessageBox()
+        msgBox.setWindowTitle('Result')
+        if checkResult is 0:
+            msgBox.setIconPixmap(self.matchedIcon)
+        else:
+            msgBox.setIconPixmap(self.errorIcon)
+        msgBox.setWindowIcon(QIcon(':icon/icon.png'))
+        msgBox.setText(str(message))
+        msgBox.exec_()
 
     # File Dialogs
 
