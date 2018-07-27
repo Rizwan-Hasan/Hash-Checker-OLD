@@ -58,7 +58,18 @@ class MainWindow(QMainWindow):
         self.textBoxCheck.setPlaceholderText('Paste your hash here to match with or leave empty\nOnly MD5 or SHA256 or SHA512 is allowed')
 
     @pyqtSlot()
+    # Open With Function
+    def openWith(self, argFile):
+        self.currentFileLoc = argFile
+        self.labelFile.setPixmap(self.doneIcon)
+        self.openFileButton.setText("'" + os.path.basename(self.currentFileLoc) + "' is loaded")
+        with open('temp486.temp', 'w') as temp:
+            temp.write(self.currentFileLoc)
+        self.start_Hash_Calculation()
+        print(argFile)
+
     # Clipboard Text
+
     def clipboardText(self):
         try:
             self.clipboardButton.clicked.disconnect()
@@ -199,6 +210,10 @@ class Hashing(QThread):
 def main():
     app = QApplication(sys.argv)
     mainWindow = MainWindow()
+    try:
+        mainWindow.openWith(sys.argv[1])
+    except IndexError:
+        pass
     mainWindow.show()
     sys.exit(app.exec_())
 
