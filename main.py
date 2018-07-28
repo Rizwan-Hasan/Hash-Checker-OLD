@@ -44,10 +44,16 @@ class MainWindow(QMainWindow):
         # Window customizing
         self.setWindowTitle('Hash Checker')
         self.setWindowIcon(self.icon)
-        # Textbox customizing
-        self.textBoxMD5.setStyleSheet("""QTextEdit { font-size: 15px; }""")
-        self.textBoxSHA256.setStyleSheet("""QTextEdit { font-size: 15px; }""")
-        self.textBoxSHA512.setStyleSheet("""QTextEdit { font-size: 15px; }""")
+        # Label font size customizing
+        self.labelMD5.setStyleSheet("""QLabel {font-size: 15px;}""")
+        self.labelSHA256.setStyleSheet("""QLabel {font-size: 15px;}""")
+        self.labelSHA512.setStyleSheet("""QLabel {font-size: 15px;}""")
+        self.labelHashBox.setStyleSheet("""QLabel {font-size: 15px;}""")
+        # Textbox font size customizing
+        self.textBoxMD5.setStyleSheet("""QTextEdit {font-size: 15px;}""")
+        self.textBoxSHA256.setStyleSheet("""QTextEdit {font-size: 15px;}""")
+        self.textBoxSHA512.setStyleSheet("""QTextEdit {font-size: 15px;}""")
+        self.textBoxCheck.setStyleSheet("""QTextEdit {font-size: 15px;}""")
         # Buttons actions
         self.openFileButton.clicked.connect(self.openFileDialog)
         self.removeFileButton.clicked.connect(self.removeFileButton_OnClick)
@@ -190,7 +196,7 @@ class MainWindow(QMainWindow):
 
     def loadingCircle(self, x):
         if(x == 'start'):
-            self.loading.setSpeed(250)
+            self.loading.setSpeed(280)
             self.labelDoneMD5.setMovie(self.loading)
             self.labelDoneSHA256.setMovie(self.loading)
             self.labelDoneSHA512.setMovie(self.loading)
