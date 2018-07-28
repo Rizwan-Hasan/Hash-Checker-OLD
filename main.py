@@ -21,6 +21,8 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
         uic.loadUi(appFolder + 'ui/MainWindow.ui', self)
+        # Loading custom styleSheet
+        self.loadStyleSheet()
         # Loaded File Location Variable
         self.currentFileLoc = None
         # Icons Variables
@@ -45,15 +47,15 @@ class MainWindow(QMainWindow):
         self.setWindowTitle('Hash Checker')
         self.setWindowIcon(self.icon)
         # Label font size customizing
-        self.labelMD5.setStyleSheet("""QLabel {font-size: 15px;}""")
-        self.labelSHA256.setStyleSheet("""QLabel {font-size: 15px;}""")
-        self.labelSHA512.setStyleSheet("""QLabel {font-size: 15px;}""")
-        self.labelHashBox.setStyleSheet("""QLabel {font-size: 15px;}""")
+        self.labelMD5.setStyleSheet(self.styleSheet)
+        self.labelSHA256.setStyleSheet(self.styleSheet)
+        self.labelSHA512.setStyleSheet(self.styleSheet)
+        self.labelHashBox.setStyleSheet(self.styleSheet)
         # Textbox font size customizing
-        self.textBoxMD5.setStyleSheet("""QTextEdit {font-size: 15px;}""")
-        self.textBoxSHA256.setStyleSheet("""QTextEdit {font-size: 15px;}""")
-        self.textBoxSHA512.setStyleSheet("""QTextEdit {font-size: 15px;}""")
-        self.textBoxCheck.setStyleSheet("""QTextEdit {font-size: 15px;}""")
+        self.textBoxMD5.setStyleSheet(self.styleSheet)
+        self.textBoxSHA256.setStyleSheet(self.styleSheet)
+        self.textBoxSHA512.setStyleSheet(self.styleSheet)
+        self.textBoxCheck.setStyleSheet(self.styleSheet)
         # Buttons actions
         self.openFileButton.clicked.connect(self.openFileDialog)
         self.removeFileButton.clicked.connect(self.removeFileButton_OnClick)
@@ -70,7 +72,13 @@ class MainWindow(QMainWindow):
         self.textBoxCheck.setPlaceholderText('Paste your hash here to match with or leave empty\nOnly MD5 or SHA256 or SHA512 is allowed')
 
     @pyqtSlot()
+    #
+    def loadStyleSheet(self):
+        with open(appFolder + 'ui/default.css', 'r') as css:
+            self.styleSheet = css.read()
+
     # Open With Function
+
     def openWith(self, argFile):
         self.currentFileLoc = argFile
         self.labelFile.setPixmap(self.doneIcon)

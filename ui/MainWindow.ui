@@ -26,7 +26,7 @@
    <string>MainWindow</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-color: rgb(243, 243, 243);</string>
+   <string notr="true"/>
   </property>
   <property name="documentMode">
    <bool>false</bool>
@@ -335,9 +335,9 @@
    <widget class="QLabel" name="labelHashBox">
     <property name="geometry">
      <rect>
-      <x>50</x>
+      <x>40</x>
       <y>380</y>
-      <width>61</width>
+      <width>71</width>
       <height>21</height>
      </rect>
     </property>
