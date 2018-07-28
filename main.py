@@ -13,7 +13,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox
 from PyQt5.QtWidgets import QFileDialog, QDesktopWidget, QTextEdit
 from PyQt5.QtCore import pyqtSlot, pyqtSignal, QThread
 
-appFolder = os.path.dirname(sys.argv[0]) + '/'  # Application root location
+appFolder = os.path.dirname(os.path.realpath(sys.argv[0])) + '/'  # Application root location
 
 
 class MainWindow(QMainWindow):
