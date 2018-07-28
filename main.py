@@ -2,6 +2,7 @@
 
 import os
 import sys
+import time
 import resources
 import pyperclip
 from functools import partial
@@ -13,72 +14,98 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox
 from PyQt5.QtWidgets import QFileDialog, QDesktopWidget, QTextEdit
 from PyQt5.QtCore import pyqtSlot, pyqtSignal, QThread
 
-appFolder = os.path.dirname(os.path.realpath(sys.argv[0])) + '/'  # Application root location
+# MD5sum of file 'ui/default.css' ↓
+default_css = 'efb4b1de53d12ee86ff3753ac39e4439'
+
+# MD5sum of file 'ui/MainWindow.ui' ↓
+MainWindow_ui = '79e3f1d4ddfca926d4891f5893a0ad3e'
+
+# Application root location ↓
+appFolder = os.path.dirname(os.path.realpath(sys.argv[0])) + '/'
 
 
+# Application's Main Window Class ↓
 class MainWindow(QMainWindow):
 
     def __init__(self):
         super(MainWindow, self).__init__()
-        uic.loadUi(appFolder + 'ui/MainWindow.ui', self)
-        # Loading custom styleSheet
-        self.loadStyleSheet()
-        # Loaded File Location Variable
+
+        # Loading UI Design Files ↓
+        if(checkHash(appFolder + 'ui/MainWindow.ui', 'md5') == MainWindow_ui):
+            uic.loadUi(appFolder + 'ui/MainWindow.ui', self)
+        else:
+            sys.exit()
+
+        # Loading custom styleSheet ↓
+        if(checkHash(appFolder + 'ui/default.css', 'md5') == default_css):
+            self.loadStyleSheet()
+        else:
+            sys.exit()
+
+        # Loaded File Location Variable ↓
         self.currentFileLoc = None
-        # Icons Variables
+
+        # Icons Variables ↓
         self.icon = QIcon(':icon/icon.png')
         self.doneIcon = QPixmap(':/done/done.png')
         self.matchedIcon = QPixmap(':/matched/matched.png')
         self.errorIcon = QPixmap(':/error/error.png')
         self.loading = QMovie(':loading/loading.gif')
-        # Main UI Calling
+
+        # Main UI Calling ↓
         self.hashCheckerUI()
 
     def makeWindowCenter(self):
+        # For launching windows in center
         qtRectangle = self.frameGeometry()
         centerPoint = QDesktopWidget().availableGeometry().center()
         qtRectangle.moveCenter(centerPoint)
         self.move(qtRectangle.topLeft())
 
     def hashCheckerUI(self):
-        # Making window centered
+        # Making window centered ↓
         self.makeWindowCenter()
-        # Window customizing
+
+        # Window customizing ↓
         self.setWindowTitle('Hash Checker')
         self.setWindowIcon(self.icon)
-        # Label font size customizing
+
+        # Label font size customizing ↓
         self.labelMD5.setStyleSheet(self.styleSheet)
         self.labelSHA256.setStyleSheet(self.styleSheet)
         self.labelSHA512.setStyleSheet(self.styleSheet)
         self.labelHashBox.setStyleSheet(self.styleSheet)
-        # Textbox font size customizing
+
+        # Textbox font size customizing ↓
         self.textBoxMD5.setStyleSheet(self.styleSheet)
         self.textBoxSHA256.setStyleSheet(self.styleSheet)
         self.textBoxSHA512.setStyleSheet(self.styleSheet)
         self.textBoxCheck.setStyleSheet(self.styleSheet)
-        # Buttons actions
+
+        # Buttons actions ↓
         self.openFileButton.clicked.connect(self.openFileDialog)
         self.removeFileButton.clicked.connect(self.removeFileButton_OnClick)
         self.clipboardButton.clicked.connect(self.clipboardText)
         self.checkButton.clicked.connect(self.checkButton_OnClick)
-        # Clipboard Buttons actions
+
+        # Clipboard Buttons actions ↓
         self.clipboardMD5Button.clicked.connect(partial(self.clipboardButtonActions_OnClick, 'md5'))
         self.clipboardSHA256Button.clicked.connect(partial(self.clipboardButtonActions_OnClick, 'sha256'))
         self.clipboardSHA512Button.clicked.connect(partial(self.clipboardButtonActions_OnClick, 'sha512'))
-        # Adding Place Holder Text
+
+        # Adding Place Holder Text ↓
         self.textBoxMD5.setPlaceholderText('...')
         self.textBoxSHA256.setPlaceholderText('...')
         self.textBoxSHA512.setPlaceholderText('...')
         self.textBoxCheck.setPlaceholderText('Paste your hash here to match with or leave empty\nOnly MD5 or SHA256 or SHA512 is allowed')
 
-    @pyqtSlot()
-    #
+    @pyqtSlot()  # Qt Framework's Slot Decorator
+    # Custom Style Sheet ↓
     def loadStyleSheet(self):
         with open(appFolder + 'ui/default.css', 'r') as css:
             self.styleSheet = css.read()
 
-    # Open With Function
-
+    # Open With Function ↓
     def openWith(self, argFile):
         self.currentFileLoc = argFile
         self.labelFile.setPixmap(self.doneIcon)
@@ -88,8 +115,7 @@ class MainWindow(QMainWindow):
         self.start_Hash_Calculation()
         print(argFile)
 
-    # Clipboard Buttons Action Functions
-
+    # Clipboard Buttons Action Functions ↓
     def clipboardButtonActions_OnClick(self, hashName):
         try:
             self.clipboardMD5Button.clicked.disconnect()
@@ -116,8 +142,7 @@ class MainWindow(QMainWindow):
         self.clipboardSHA256Button.clicked.connect(partial(self.clipboardButtonActions_OnClick, 'sha256'))
         self.clipboardSHA512Button.clicked.connect(partial(self.clipboardButtonActions_OnClick, 'sha512'))
 
-    # Clipboard Text
-
+    # Clipboard Text ↓
     def clipboardText(self):
         try:
             self.clipboardButton.clicked.disconnect()
@@ -128,6 +153,7 @@ class MainWindow(QMainWindow):
         self.textBoxCheck.setText(clipText)
         self.clipboardButton.clicked.connect(self.clipboardText)
 
+    # Check Button's Action Function ↓
     def checkButton_OnClick(self):
         try:
             self.checkButton.clicked.disconnect()
@@ -158,6 +184,7 @@ class MainWindow(QMainWindow):
 
         self.checkButton.clicked.connect(self.checkButton_OnClick)
 
+    # Check Buttons Action Dialogue ↓
     def checkButtonDialogue(self, message, checkResult=0):
         msgBox = QMessageBox()
         msgBox.setWindowTitle('Result')
@@ -169,8 +196,7 @@ class MainWindow(QMainWindow):
         msgBox.setText(str(message))
         msgBox.exec_()
 
-    # File Dialogs
-
+    # File Dialogs ↓
     def openFileDialog(self):
         try:
             self.openFileButton.clicked.disconnect()
@@ -188,8 +214,7 @@ class MainWindow(QMainWindow):
             self.start_Hash_Calculation()
         self.openFileButton.clicked.connect(self.openFileDialog)
 
-    # Buttons Actions Function
-
+    # Buttons Actions Function ↓
     def start_Hash_Calculation(self):
         self.loadingCircle('start')
         self.textBoxMD5.setText("Computing...")
@@ -202,6 +227,7 @@ class MainWindow(QMainWindow):
         self.hashing.signalStopLoading.connect(self.loadingCircle)
         self.hashing.start()
 
+    # Loading Circle Initialize ↓
     def loadingCircle(self, x):
         if(x == 'start'):
             self.loading.setSpeed(280)
@@ -216,6 +242,7 @@ class MainWindow(QMainWindow):
         elif(x == 'stop_SHA512'):
             self.labelDoneSHA512.setPixmap(self.doneIcon)
 
+    # Remove Button's Action Function ↓
     def removeFileButton_OnClick(self):
         try:
             self.removeFileButton.clicked.disconnect()
@@ -229,12 +256,13 @@ class MainWindow(QMainWindow):
         self.labelDoneMD5.setText(" ")
         self.labelDoneSHA256.setText(" ")
         self.labelDoneSHA512.setText(" ")
-        self.labelFile.setPixmap(QPixmap(appFolder + 'icons/folder_open.png'))
+        self.labelFile.setPixmap(QPixmap(':folder_open/folder_open.png'))
         self.removeFileButton.clicked.connect(self.removeFileButton_OnClick)
 
 
+# Hash Calculation Background Process Class ↓
 class Hashing(QThread):
-    # Hash Calculation Background Process
+
     signalMD5 = pyqtSignal(str)
     signalSHA256 = pyqtSignal(str)
     signalSHA512 = pyqtSignal(str)
@@ -244,17 +272,18 @@ class Hashing(QThread):
         with open('temp486.temp', 'r') as temp:
             fileLoc = temp.read()
         os.remove('temp486.temp')
-        # Calculating MD5sum
+        # Calculating MD5sum ↓
         self.signalMD5.emit(checkHash(fileLoc, 'md5'))
         self.signalStopLoading.emit('stop_MD5')
-        # Calculating SHA256sum
+        # Calculating SHA256sum ↓
         self.signalSHA256.emit(checkHash(fileLoc, 'sha256'))
         self.signalStopLoading.emit('stop_SHA256')
-        # Calculating SHA512sum
+        # Calculating SHA512sum ↓
         self.signalSHA512.emit(checkHash(fileLoc, 'sha512'))
         self.signalStopLoading.emit('stop_SHA512')
 
 
+# Main Function ↓
 def main():
     app = QApplication(sys.argv)
     mainWindow = MainWindow()
@@ -266,5 +295,6 @@ def main():
     sys.exit(app.exec_())
 
 
+# Start Application ↓
 if __name__ == '__main__':
     main()
