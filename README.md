@@ -1,1 +1,1 @@
-# Still in development stage
+# Hash Checker
