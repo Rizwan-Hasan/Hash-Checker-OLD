@@ -14,6 +14,11 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox
 from PyQt5.QtWidgets import QFileDialog, QDesktopWidget, QTextEdit
 from PyQt5.QtCore import pyqtSlot, pyqtSignal, QThread
 
+# For PyInstaller
+import packaging
+from packaging import specifiers
+from packaging import requirements
+
 # MD5sum of file 'ui/default.css' ↓
 default_css = 'efb4b1de53d12ee86ff3753ac39e4439'
 
