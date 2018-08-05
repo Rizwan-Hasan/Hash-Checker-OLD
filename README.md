@@ -1,2 +1,2 @@
 # Hash Checker
-Download: <a href="http://free-hash-checker.sourceforge.io">Free-Hash-Checker.sourceforge.io</a>
+Download from: <a href="http://free-hash-checker.sourceforge.io">http://Free-Hash-Checker.sourceforge.io</a>
