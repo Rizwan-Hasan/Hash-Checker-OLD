@@ -6,11 +6,12 @@ import time
 import resources
 import pyperclip
 from functools import partial
+from threadClass import Hashing
 from HashChecker import checkHash
 import PyQt5
 from PyQt5 import uic, sip
 from PyQt5.QtGui import QIcon, QPixmap, QMovie
-from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox
+from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox, QLabel, QPushButton
 from PyQt5.QtWidgets import QFileDialog, QDesktopWidget, QTextEdit
 from PyQt5.QtCore import pyqtSlot, pyqtSignal, QThread
 
@@ -27,7 +28,6 @@ MainWindow_ui = '79e3f1d4ddfca926d4891f5893a0ad3e'
 
 # Application root location ↓
 appFolder = os.path.dirname(os.path.realpath(sys.argv[0])) + '/'
-
 
 # Application's Main Window Class ↓
 class MainWindow(QMainWindow):
@@ -75,6 +75,12 @@ class MainWindow(QMainWindow):
         self.setWindowTitle('Hash Checker')
         self.setWindowIcon(self.icon)
 
+        # Enabling Drag and Drop
+        self.setAcceptDrops(True)
+
+        # A Starus
+        self.statusBar().showMessage('You can drag and drop a file, not multiple file')
+
         # Label font size customizing ↓
         self.labelMD5.setStyleSheet(self.styleSheet)
         self.labelSHA256.setStyleSheet(self.styleSheet)
@@ -88,6 +94,7 @@ class MainWindow(QMainWindow):
         self.textBoxCheck.setStyleSheet(self.styleSheet)
 
         # Buttons actions ↓
+        #self.openFileButton = DragAndDrop(self)
         self.openFileButton.clicked.connect(self.openFileDialog)
         self.removeFileButton.clicked.connect(self.removeFileButton_OnClick)
         self.clipboardButton.clicked.connect(self.clipboardText)
@@ -109,6 +116,33 @@ class MainWindow(QMainWindow):
     def loadStyleSheet(self):
         with open(appFolder + 'ui/default.css', 'r') as css:
             self.styleSheet = css.read()
+
+    # Drag and Drop Functions ↓
+    def dragEnterEvent(self, e):
+        if e.mimeData().hasFormat('text/plain'):
+            e.accept()
+        else:
+            e.ignore()
+
+    def dragMoveEvent(self, e):
+        if e.mimeData().hasFormat('text/plain'):
+            e.accept()
+        else:
+            e.ignore()
+
+    def dropEvent(self, e):
+        if e.mimeData().text():
+            self.currentFileLoc = e.mimeData().text()
+            self.currentFileLoc = self.currentFileLoc.replace('file://', '')
+            # Removing '\n' # Example: 'Rizwan Hasan\n' -> 'Rizwan Hasan'
+            self.currentFileLoc = self.currentFileLoc[:len(self.currentFileLoc) - 2]
+            # Replacing '%20' with ' ' # Example: 'Rizwan%20Hasan' -> 'Rizwan Hasan'
+            self.currentFileLoc = self.currentFileLoc.replace('%20', ' ')
+            self.labelFile.setPixmap(self.doneIcon)
+            self.openFileButton.setText("'" + os.path.basename(self.currentFileLoc) + "' is loaded")
+            with open('temp486.temp', 'w') as temp:
+                temp.write(self.currentFileLoc)
+            self.start_Hash_Calculation()
 
     # Open With Function ↓
     def openWith(self, argFile):
@@ -263,29 +297,6 @@ class MainWindow(QMainWindow):
         self.labelDoneSHA512.setText(" ")
         self.labelFile.setPixmap(QPixmap(':folder_open/folder_open.png'))
         self.removeFileButton.clicked.connect(self.removeFileButton_OnClick)
-
-
-# Hash Calculation Background Process Class ↓
-class Hashing(QThread):
-
-    signalMD5 = pyqtSignal(str)
-    signalSHA256 = pyqtSignal(str)
-    signalSHA512 = pyqtSignal(str)
-    signalStopLoading = pyqtSignal(str)
-
-    def run(self):
-        with open('temp486.temp', 'r') as temp:
-            fileLoc = temp.read()
-        os.remove('temp486.temp')
-        # Calculating MD5sum ↓
-        self.signalMD5.emit(checkHash(fileLoc, 'md5'))
-        self.signalStopLoading.emit('stop_MD5')
-        # Calculating SHA256sum ↓
-        self.signalSHA256.emit(checkHash(fileLoc, 'sha256'))
-        self.signalStopLoading.emit('stop_SHA256')
-        # Calculating SHA512sum ↓
-        self.signalSHA512.emit(checkHash(fileLoc, 'sha512'))
-        self.signalStopLoading.emit('stop_SHA512')
 
 
 # Main Function ↓
