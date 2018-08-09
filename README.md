@@ -1,4 +1,4 @@
-# Is in development stage for upcoming v2.1
+# Is in development stage for upcoming version 2.1
 
 # Hash Checker v2.0
 Download from: <a href="http://free-hash-checker.sourceforge.io">http://Free-Hash-Checker.sourceforge.io</a>
