@@ -2,6 +2,9 @@
   <qresource prefix="folder_open">
     <file>folder_open.png</file>
   </qresource>
+  <qresource prefix="about">
+    <file>about.png</file>
+  </qresource>
   <qresource prefix="header">
     <file>header.png</file>
   </qresource>

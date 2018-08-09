@@ -20,10 +20,10 @@ from packaging import specifiers
 from packaging import requirements
 
 # MD5sum of file 'ui/default.css' ↓
-default_css = 'efb4b1de53d12ee86ff3753ac39e4439'
+default_css = 'NONE'
 
 # MD5sum of file 'ui/MainWindow.ui' ↓
-MainWindow_ui = '79e3f1d4ddfca926d4891f5893a0ad3e'
+MainWindow_ui = 'ed3160909c3bd2dfafed750d5f2e6ece'
 
 # Application root location ↓
 appFolder = os.path.dirname(os.path.realpath(sys.argv[0])) + '/'
@@ -41,7 +41,7 @@ class MainWindow(QMainWindow):
             sys.exit()
 
         # Loading custom styleSheet ↓
-        if(checkHash(appFolder + 'ui/default.css', 'md5') == default_css):
+        if(checkHash(appFolder + 'ui/default.css', 'md5') != default_css):
             self.loadStyleSheet()
         else:
             sys.exit()
