@@ -1,8 +1,7 @@
-#!/usr/bin/env python3
-
 import os
 import sys
 import time
+import platform
 import resources
 import pyperclip
 from functools import partial
@@ -119,13 +118,13 @@ class MainWindow(QMainWindow):
 
     # Drag and Drop Functions ↓
     def dragEnterEvent(self, e):
-        if e.mimeData().hasFormat('text/plain'):
+        if e.mimeData().hasUrls():
             e.accept()
         else:
             e.ignore()
 
     def dragMoveEvent(self, e):
-        if e.mimeData().hasFormat('text/plain'):
+        if e.mimeData().hasUrls():
             e.accept()
         else:
             e.ignore()
@@ -133,11 +132,17 @@ class MainWindow(QMainWindow):
     def dropEvent(self, e):
         if e.mimeData().text():
             self.currentFileLoc = e.mimeData().text()
-            self.currentFileLoc = self.currentFileLoc.replace('file://', '')
-            # Removing '\n' # Example: 'Rizwan Hasan\n' -> 'Rizwan Hasan'
-            self.currentFileLoc = self.currentFileLoc[:len(self.currentFileLoc) - 2]
-            # Replacing '%20' with ' ' # Example: 'Rizwan%20Hasan' -> 'Rizwan Hasan'
-            self.currentFileLoc = self.currentFileLoc.replace('%20', ' ')
+            if(platform.system() == 'Windows'):  # For Windows OS
+                # Removing 'file:///' # Example: 'file:///Rizwan Hasan' -> 'Rizwan Hasan'
+                self.currentFileLoc = self.currentFileLoc.replace('file:///', '')
+                print(self.currentFileLoc)
+            else:
+                # Removing 'file://' # Example: 'file:///Rizwan Hasan' -> '/Rizwan Hasan'
+                self.currentFileLoc = self.currentFileLoc.replace('file://', '')
+                # Removing '\n' # Example: 'Rizwan Hasan\n' -> 'Rizwan Hasan'
+                self.currentFileLoc = self.currentFileLoc[:len(self.currentFileLoc) - 2]
+                # Replacing '%20' with ' ' # Example: 'Rizwan%20Hasan' -> 'Rizwan Hasan'
+                self.currentFileLoc = self.currentFileLoc.replace('%20', ' ')
             self.labelFile.setPixmap(self.doneIcon)
             self.openFileButton.setText("'" + os.path.basename(self.currentFileLoc) + "' is loaded")
             with open('temp486.temp', 'w') as temp:

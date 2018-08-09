@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 
 ''' All QThread classes are here '''
 
