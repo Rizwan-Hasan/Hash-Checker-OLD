@@ -444,9 +444,41 @@
     </property>
     <property name="iconSize">
      <size>
-      <width>29</width>
-      <height>26</height>
+      <width>25</width>
+      <height>25</height>
      </size>
+    </property>
+   </widget>
+   <widget class="QLabel" name="labelLoadingBall">
+    <property name="geometry">
+     <rect>
+      <x>460</x>
+      <y>370</y>
+      <width>21</width>
+      <height>71</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="labelVersionString">
+    <property name="geometry">
+     <rect>
+      <x>360</x>
+      <y>70</y>
+      <width>81</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-weight:496; color:#3e3e3e;&quot;&gt;Version: 2.1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
     </property>
    </widget>
   </widget>
@@ -456,7 +488,7 @@
      <x>0</x>
      <y>0</y>
      <width>508</width>
-     <height>24</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>

@@ -7,6 +7,7 @@ import pyperclip
 from functools import partial
 from threadClass import Hashing
 from HashChecker import checkHash
+from about import AboutWindow
 import PyQt5
 from PyQt5 import uic, sip
 from PyQt5.QtGui import QIcon, QPixmap, QMovie
@@ -20,10 +21,10 @@ from packaging import specifiers
 from packaging import requirements
 
 # MD5sum of file 'ui/default.css' ↓
-default_css = 'NONE'
+default_css = 'None'
 
 # MD5sum of file 'ui/MainWindow.ui' ↓
-MainWindow_ui = 'ed3160909c3bd2dfafed750d5f2e6ece'
+MainWindow_ui = 'None'
 
 # Application root location ↓
 appFolder = os.path.dirname(os.path.realpath(sys.argv[0])) + '/'
@@ -35,7 +36,7 @@ class MainWindow(QMainWindow):
         super(MainWindow, self).__init__()
 
         # Loading UI Design Files ↓
-        if(checkHash(appFolder + 'ui/MainWindow.ui', 'md5') == MainWindow_ui):
+        if(checkHash(appFolder + 'ui/MainWindow.ui', 'md5') != MainWindow_ui):
             uic.loadUi(appFolder + 'ui/MainWindow.ui', self)
         else:
             sys.exit()
@@ -46,6 +47,9 @@ class MainWindow(QMainWindow):
         else:
             sys.exit()
 
+        # Other UI's Variables
+        self.aboutUiVar = AboutWindow()
+
         # Loaded File Location Variable ↓
         self.currentFileLoc = None
 
@@ -55,6 +59,7 @@ class MainWindow(QMainWindow):
         self.matchedIcon = QPixmap(':/matched/matched.png')
         self.errorIcon = QPixmap(':/error/error.png')
         self.loading = QMovie(':loading/loading.gif')
+        self.folderOpenIcon = QPixmap(':folder_open/folder_open.png')
 
         # Main UI Calling ↓
         self.hashCheckerUI()
@@ -70,6 +75,11 @@ class MainWindow(QMainWindow):
         # Making window centered ↓
         self.makeWindowCenter()
 
+        self.movie = QMovie(':loadingBall/loadingBall.gif')
+        self.movie.setSpeed(150)
+        self.labelLoadingBall.setMovie(self.movie)
+        self.movie.start()
+
         # Window customizing ↓
         self.setWindowTitle('Hash Checker')
         self.setWindowIcon(self.icon)
@@ -77,27 +87,15 @@ class MainWindow(QMainWindow):
         # Enabling Drag and Drop
         self.setAcceptDrops(True)
 
-        # A Starus
+        # A Status
         self.statusBar().showMessage('You can drag and drop a file, not multiple file')
 
-        # Label font size customizing ↓
-        self.labelMD5.setStyleSheet(self.styleSheet)
-        self.labelSHA256.setStyleSheet(self.styleSheet)
-        self.labelSHA512.setStyleSheet(self.styleSheet)
-        self.labelHashBox.setStyleSheet(self.styleSheet)
-
-        # Textbox font size customizing ↓
-        self.textBoxMD5.setStyleSheet(self.styleSheet)
-        self.textBoxSHA256.setStyleSheet(self.styleSheet)
-        self.textBoxSHA512.setStyleSheet(self.styleSheet)
-        self.textBoxCheck.setStyleSheet(self.styleSheet)
-
         # Buttons actions ↓
-        #self.openFileButton = DragAndDrop(self)
         self.openFileButton.clicked.connect(self.openFileDialog)
         self.removeFileButton.clicked.connect(self.removeFileButton_OnClick)
         self.clipboardButton.clicked.connect(self.clipboardText)
         self.checkButton.clicked.connect(self.checkButton_OnClick)
+        self.aboutButton.clicked.connect(self.aboutUI)
 
         # Clipboard Buttons actions ↓
         self.clipboardMD5Button.clicked.connect(partial(self.clipboardButtonActions_OnClick, 'md5'))
@@ -111,10 +109,43 @@ class MainWindow(QMainWindow):
         self.textBoxCheck.setPlaceholderText('Paste your hash here to match with or leave empty\nOnly MD5 or SHA256 or SHA512 is allowed')
 
     @pyqtSlot()  # Qt Framework's Slot Decorator
+
+    def closeEvent(self, event):
+        try:
+            # Closing All Opened Window
+            self.aboutUiVar.close()
+        except AttributeError:
+            pass
+
     # Custom Style Sheet ↓
     def loadStyleSheet(self):
         with open(appFolder + 'ui/default.css', 'r') as css:
             self.styleSheet = css.read()
+
+        # Label font size customizing using CSS ↓
+        self.labelMD5.setStyleSheet(self.styleSheet)
+        self.labelSHA256.setStyleSheet(self.styleSheet)
+        self.labelSHA512.setStyleSheet(self.styleSheet)
+        self.labelHashBox.setStyleSheet(self.styleSheet)
+
+        # Button customizing using CSS ↓
+        self.aboutButton.setStyleSheet(self.styleSheet)
+
+        # Textbox font size customizing using CSS ↓
+        self.textBoxMD5.setStyleSheet(self.styleSheet)
+        self.textBoxSHA256.setStyleSheet(self.styleSheet)
+        self.textBoxSHA512.setStyleSheet(self.styleSheet)
+        self.textBoxCheck.setStyleSheet(self.styleSheet)
+
+    # Other User Interface Function ↓
+    def aboutUI(self):
+        # About Window
+        try:
+            self.aboutButton.clicked.disconnect()
+        except:
+            pass
+        self.aboutUiVar.show()
+        self.aboutButton.clicked.connect(self.aboutUI)
 
     # Drag and Drop Functions ↓
     def dragEnterEvent(self, e):
@@ -294,13 +325,17 @@ class MainWindow(QMainWindow):
             pass
         self.currentFileLoc = None
         self.openFileButton.setText('Click to open a file')
-        self.textBoxMD5.setText("")
-        self.textBoxSHA256.setText("")
-        self.textBoxSHA512.setText("")
+        self.textBoxMD5.clear()
+        self.textBoxSHA256.clear()
+        self.textBoxSHA512.clear()
+        self.textBoxCheck.clear()
         self.labelDoneMD5.setText(" ")
         self.labelDoneSHA256.setText(" ")
         self.labelDoneSHA512.setText(" ")
-        self.labelFile.setPixmap(QPixmap(':folder_open/folder_open.png'))
+        self.labelFile.setPixmap(self.folderOpenIcon)
+        self.statusBar().showMessage('Cleared...')
+        time.sleep(1.0)
+        self.statusBar().showMessage('You can drag and drop a file, not multiple file')
         self.removeFileButton.clicked.connect(self.removeFileButton_OnClick)
 
 

@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="folder_open">
+    <file>resources.qrc</file>
     <file>folder_open.png</file>
   </qresource>
   <qresource prefix="about">
@@ -28,5 +29,14 @@
   </qresource>
   <qresource prefix="clipboard">
     <file>clipboard.png</file>
+  </qresource>
+  <qresource prefix="loadingBall">
+    <file>loadingBall.gif</file>
+  </qresource>
+  <qresource prefix="license">
+    <file>license.png</file>
+  </qresource>
+  <qresource prefix="opensource">
+    <file>opensource.png</file>
   </qresource>
 </RCC>
