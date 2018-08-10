@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 import os
 import sys
 import time
@@ -64,6 +66,7 @@ class MainWindow(QMainWindow):
         self.matchedIcon = QPixmap(':/matched/matched.png')
         self.errorIcon = QPixmap(':/error/error.png')
         self.loading = QMovie(':loading/loading.gif')
+        self.loadingBall = QMovie(':loadingBall/loadingBall.gif')
         self.folderOpenIcon = QPixmap(':folder_open/folder_open.png')
 
         # Software Version Variable
@@ -83,11 +86,6 @@ class MainWindow(QMainWindow):
         # Making window centered ↓
         self.makeWindowCenter()
 
-        self.movie = QMovie(':loadingBall/loadingBall.gif')
-        self.movie.setSpeed(150)
-        self.labelLoadingBall.setMovie(self.movie)
-        self.movie.start()
-
         # Window customizing ↓
         self.setWindowTitle('Hash Checker')
         self.setWindowIcon(self.icon)
@@ -101,6 +99,7 @@ class MainWindow(QMainWindow):
         # Buttons actions ↓
         self.openFileButton.clicked.connect(self.openFileDialog)
         self.removeFileButton.clicked.connect(self.removeFileButton_OnClick)
+        self.clearButton.clicked.connect(self.clearButton_OnClick)
         self.clipboardButton.clicked.connect(self.clipboardText)
         self.checkButton.clicked.connect(self.checkButton_OnClick)
         self.aboutButton.clicked.connect(self.aboutUI)
@@ -234,7 +233,22 @@ class MainWindow(QMainWindow):
         clipText = QApplication.clipboard().text()
         clipText = clipText.strip()
         self.textBoxCheck.setText(clipText)
+        self.loadingBallAnimation('start')
         self.clipboardButton.clicked.connect(self.clipboardText)
+
+    # Clear Button's Action ↓
+    def clearButton_OnClick(self):
+        self.loadingBallAnimation('stop')
+        self.labelLoadingBall.clear()
+
+    # Loading Ball Animation ↓
+    def loadingBallAnimation(self, decider):
+        self.loadingBall.setSpeed(150)
+        self.labelLoadingBall.setMovie(self.loadingBall)
+        if(decider == 'start'):
+            self.loadingBall.start()
+        elif(decider == 'stop'):
+            self.loadingBall.stop()
 
     # Check Button's Action Function ↓
     def checkButton_OnClick(self):
@@ -337,9 +351,10 @@ class MainWindow(QMainWindow):
         self.textBoxSHA256.clear()
         self.textBoxSHA512.clear()
         self.textBoxCheck.clear()
-        self.labelDoneMD5.setText(" ")
-        self.labelDoneSHA256.setText(" ")
-        self.labelDoneSHA512.setText(" ")
+        self.labelDoneMD5.clear()
+        self.labelDoneSHA256.clear()
+        self.labelDoneSHA512.clear()
+        self.clearButton_OnClick()
         self.labelFile.setPixmap(self.folderOpenIcon)
         self.statusBar().showMessage('Cleared...')
         time.sleep(1.0)

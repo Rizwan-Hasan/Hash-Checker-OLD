@@ -5,8 +5,8 @@ def checkHash(fileLoc, option):
     from hashlib import md5, sha256, sha512
 
     # Specifing how many bytes of the file to open at a time  ↓
-    BLOCKSIZE = 128000
-    # 128000 Byte = 128 KiloByte
+    BLOCKSIZE = 4096
+    # 4096 Byte = 4 KiloByte
 
     # Variables  ↓
     md5Hasher = md5()
