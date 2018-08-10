@@ -101,6 +101,9 @@
    <property name="text">
     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:14pt; color:#303030;&quot;&gt;Source code&lt;/span&gt;&lt;span style=&quot; font-size:14pt;&quot;&gt;: &lt;/span&gt;&lt;a href=&quot;https://github.com/Rizwan-Hasan/Hash-Checker&quot;&gt;&lt;span style=&quot; font-size:14pt; text-decoration: underline; color:#0000ff;&quot;&gt;See on Github&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
+   <property name="openExternalLinks">
+    <bool>true</bool>
+   </property>
   </widget>
   <widget class="QLabel" name="label_6">
    <property name="geometry">
