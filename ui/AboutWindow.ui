@@ -49,12 +49,12 @@
     <rect>
      <x>120</x>
      <y>60</y>
-     <width>81</width>
+     <width>71</width>
      <height>20</height>
     </rect>
    </property>
    <property name="text">
-    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-weight:600; color:#2f2f2f;&quot;&gt;Version: 2.1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    <string>version</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_3">

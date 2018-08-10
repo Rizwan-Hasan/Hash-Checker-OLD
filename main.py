@@ -7,6 +7,7 @@ import pyperclip
 from functools import partial
 from threadClass import Hashing
 from HashChecker import checkHash
+from versionInfo import Software_Version
 from about import AboutWindow
 import PyQt5
 from PyQt5 import uic, sip
@@ -23,8 +24,9 @@ from packaging import requirements
 # MD5sum of file 'ui/default.css' ↓
 default_css = 'None'
 
-# MD5sum of file 'ui/MainWindow.ui' ↓
+# MD5sum of ui file ↓
 MainWindow_ui = 'None'
+AboutWindow_ui = 'None'
 
 # Application root location ↓
 appFolder = os.path.dirname(os.path.realpath(sys.argv[0])) + '/'
@@ -35,20 +37,23 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
 
-        # Loading UI Design Files ↓
+        # Loading Main UI Design Files ↓
         if(checkHash(appFolder + 'ui/MainWindow.ui', 'md5') != MainWindow_ui):
             uic.loadUi(appFolder + 'ui/MainWindow.ui', self)
         else:
-            sys.exit()
+            sys.exit('MainWindow.ui file corrupted')
 
         # Loading custom styleSheet ↓
         if(checkHash(appFolder + 'ui/default.css', 'md5') != default_css):
             self.loadStyleSheet()
         else:
-            sys.exit()
+            sys.exit('default.css file corrupted')
 
-        # Other UI's Variables
-        self.aboutUiVar = AboutWindow()
+        # Other UI Design Variables
+        if(checkHash(appFolder + 'ui/AboutWindow.ui', 'md5') != AboutWindow_ui):
+            self.aboutUiVar = AboutWindow()
+        else:
+            sys.exit('AboutWindow.ui file corrupted')
 
         # Loaded File Location Variable ↓
         self.currentFileLoc = None
@@ -60,6 +65,9 @@ class MainWindow(QMainWindow):
         self.errorIcon = QPixmap(':/error/error.png')
         self.loading = QMovie(':loading/loading.gif')
         self.folderOpenIcon = QPixmap(':folder_open/folder_open.png')
+
+        # Software Version Variable
+        self.labelVersionString.setText(Software_Version)
 
         # Main UI Calling ↓
         self.hashCheckerUI()
