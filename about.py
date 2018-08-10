@@ -3,7 +3,7 @@
 import sys
 import os
 import resources
-from versionInfo import Software_Version
+import versionInfo
 from PyQt5 import uic
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QApplication, QMainWindow
@@ -16,7 +16,7 @@ class AboutWindow(QMainWindow):
         super(AboutWindow, self).__init__()
         uic.loadUi(appFolder + 'ui/AboutWindow.ui', self)
         self.aboutIcon = QIcon(':about/about.png')
-        self.labelVersionString.setText(Software_Version)
+        self.labelVersionString.setText(versionInfo.Software_Version)
         self.aboutUI()
 
     def makeWindowCenter(self):
@@ -43,4 +43,3 @@ def main():
 
 if __name__ == '__main__':
     print('Hello World')
-    main()

@@ -5,9 +5,9 @@ import platform
 import resources
 import pyperclip
 from functools import partial
+import versionInfo
 from threadClass import Hashing
 from HashChecker import checkHash
-from versionInfo import Software_Version
 from about import AboutWindow
 import PyQt5
 from PyQt5 import uic, sip
@@ -67,7 +67,7 @@ class MainWindow(QMainWindow):
         self.folderOpenIcon = QPixmap(':folder_open/folder_open.png')
 
         # Software Version Variable
-        self.labelVersionString.setText(Software_Version)
+        self.labelVersionString.setText(versionInfo.Software_Version)
 
         # Main UI Calling ↓
         self.hashCheckerUI()
