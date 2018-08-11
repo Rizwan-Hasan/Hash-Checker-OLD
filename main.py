@@ -7,6 +7,8 @@ import platform
 import resources
 import pyperclip
 from functools import partial
+import tmpdir
+import filesMD5
 import versionInfo
 from threadClass import Hashing
 from HashChecker import checkHash
@@ -23,12 +25,6 @@ import packaging
 from packaging import specifiers
 from packaging import requirements
 
-# MD5sum of file 'ui/default.css' ↓
-default_css = 'None'
-
-# MD5sum of ui file ↓
-MainWindow_ui = 'None'
-AboutWindow_ui = 'None'
 
 # Application root location ↓
 appFolder = os.path.dirname(os.path.realpath(sys.argv[0])) + '/'
@@ -40,25 +36,28 @@ class MainWindow(QMainWindow):
         super(MainWindow, self).__init__()
 
         # Loading Main UI Design Files ↓
-        if(checkHash(appFolder + 'ui/MainWindow.ui', 'md5') != MainWindow_ui):
+        if(checkHash(appFolder + 'ui/MainWindow.ui', 'md5') == filesMD5.MainWindow_ui):
             uic.loadUi(appFolder + 'ui/MainWindow.ui', self)
         else:
-            sys.exit('MainWindow.ui file corrupted')
+            sys.exit('MainWindow.ui file is corrupted')
 
         # Loading custom styleSheet ↓
-        if(checkHash(appFolder + 'ui/default.css', 'md5') != default_css):
+        if(checkHash(appFolder + 'ui/default.css', 'md5') == filesMD5.default_css):
             self.loadStyleSheet()
         else:
-            sys.exit('default.css file corrupted')
+            sys.exit('default.css file is corrupted')
 
         # Other UI Design Variables
-        if(checkHash(appFolder + 'ui/AboutWindow.ui', 'md5') != AboutWindow_ui):
+        if(checkHash(appFolder + 'ui/AboutWindow.ui', 'md5') == filesMD5.AboutWindow_ui):
             self.aboutUiVar = AboutWindow()
         else:
-            sys.exit('AboutWindow.ui file corrupted')
+            sys.exit('AboutWindow.ui file is corrupted')
 
         # Loaded File Location Variable ↓
         self.currentFileLoc = None
+
+        # Temp Variable
+        self.temp486 = tmpdir.tmpLoc + 'temp486.temp'
 
         # Icons Variables ↓
         self.icon = QIcon(':icon/icon.png')
@@ -183,7 +182,7 @@ class MainWindow(QMainWindow):
                 self.currentFileLoc = self.currentFileLoc.replace('%20', ' ')
             self.labelFile.setPixmap(self.doneIcon)
             self.openFileButton.setText("'" + os.path.basename(self.currentFileLoc) + "' is loaded")
-            with open('temp486.temp', 'w') as temp:
+            with open(self.temp486, 'w') as temp:
                 temp.write(self.currentFileLoc)
             self.start_Hash_Calculation()
 
@@ -192,7 +191,7 @@ class MainWindow(QMainWindow):
         self.currentFileLoc = argFile
         self.labelFile.setPixmap(self.doneIcon)
         self.openFileButton.setText("'" + os.path.basename(self.currentFileLoc) + "' is loaded")
-        with open('temp486.temp', 'w') as temp:
+        with open(self.temp486, 'w') as temp:
             temp.write(self.currentFileLoc)
         self.start_Hash_Calculation()
         print(argFile)
@@ -306,7 +305,7 @@ class MainWindow(QMainWindow):
             self.currentFileLoc = fileName
             self.labelFile.setPixmap(self.doneIcon)
             self.openFileButton.setText("'" + os.path.basename(self.currentFileLoc) + "' is loaded")
-            with open('temp486.temp', 'w') as temp:
+            with open(self.temp486, 'w') as temp:
                 temp.write(self.currentFileLoc)
             self.start_Hash_Calculation()
         self.openFileButton.clicked.connect(self.openFileDialog)

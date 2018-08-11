@@ -2,6 +2,7 @@
 ''' All QThread classes are here '''
 
 import os
+import tmpdir
 from HashChecker import checkHash
 import PyQt5
 from PyQt5.QtCore import pyqtSignal, QThread
@@ -14,10 +15,13 @@ class Hashing(QThread):
     signalSHA512 = pyqtSignal(str)
     signalStopLoading = pyqtSignal(str)
 
+    # Temporary Location Variable
+    temp486 = tmpdir.tmpLoc + 'temp486.temp'
+
     def run(self):
-        with open('temp486.temp', 'r') as temp:
+        with open(self.temp486, 'r') as temp:
             fileLoc = temp.read()
-        os.remove('temp486.temp')
+        os.remove(self.temp486)
         # Calculating MD5sum ↓
         self.signalMD5.emit(checkHash(fileLoc, 'md5'))
         self.signalStopLoading.emit('stop_MD5')
