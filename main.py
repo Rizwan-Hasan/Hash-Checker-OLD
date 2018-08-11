@@ -13,6 +13,8 @@ import versionInfo
 from threadClass import Hashing
 from HashChecker import checkHash
 from about import AboutWindow
+
+# PyQt5 Imports
 import PyQt5
 from PyQt5 import uic, sip
 from PyQt5.QtGui import QIcon, QPixmap, QMovie
@@ -20,7 +22,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox, QLabel, QPus
 from PyQt5.QtWidgets import QFileDialog, QDesktopWidget, QTextEdit
 from PyQt5.QtCore import pyqtSlot, pyqtSignal, QThread
 
-# For PyInstaller
+# PyInstaller requirements
 import packaging
 from packaging import specifiers
 from packaging import requirements
