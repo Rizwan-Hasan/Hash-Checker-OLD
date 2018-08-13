@@ -17,6 +17,7 @@ from about import AboutWindow
 # PyQt5 Imports
 import PyQt5
 from PyQt5 import uic, sip
+from PyQt5 import QtGui
 from PyQt5.QtGui import QIcon, QPixmap, QMovie
 from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox, QLabel, QPushButton
 from PyQt5.QtWidgets import QFileDialog, QDesktopWidget, QTextEdit
@@ -82,6 +83,12 @@ class MainWindow(QMainWindow):
         centerPoint = QDesktopWidget().availableGeometry().center()
         qtRectangle.moveCenter(centerPoint)
         self.move(qtRectangle.topLeft())
+
+    def customFont(self):
+        from QtGui import QFontDatabase, QFont
+        font = QFontDatabase.addApplicationFont('NAME.ttf')
+        font = QFont('NAME');
+        self.setFont(font)
 
     def hashCheckerUI(self):
         # Making window centered ↓
