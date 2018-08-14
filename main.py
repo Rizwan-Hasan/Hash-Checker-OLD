@@ -39,19 +39,19 @@ class MainWindow(QMainWindow):
         super(MainWindow, self).__init__()
 
         # Loading Main UI Design Files ↓
-        if(checkHash(appFolder + 'ui/MainWindow.ui', 'md5') == filesMD5.MainWindow_ui):
+        if(checkHash(appFolder + 'ui/MainWindow.ui', 'md5') == filesMD5.MainWindow_ui or filesMD5.skipCheck == 'skip'):
             uic.loadUi(appFolder + 'ui/MainWindow.ui', self)
         else:
             sys.exit('MainWindow.ui file is corrupted')
 
         # Loading custom styleSheet ↓
-        if(checkHash(appFolder + 'ui/default.css', 'md5') == filesMD5.default_css):
+        if(checkHash(appFolder + 'ui/default.css', 'md5') == filesMD5.default_css or filesMD5.skipCheck == 'skip'):
             self.loadStyleSheet()
         else:
             sys.exit('default.css file is corrupted')
 
         # Other UI Design Variables
-        if(checkHash(appFolder + 'ui/AboutWindow.ui', 'md5') == filesMD5.AboutWindow_ui):
+        if(checkHash(appFolder + 'ui/AboutWindow.ui', 'md5') == filesMD5.AboutWindow_ui or filesMD5.skipCheck == 'skip'):
             self.aboutUiVar = AboutWindow()
         else:
             sys.exit('AboutWindow.ui file is corrupted')
