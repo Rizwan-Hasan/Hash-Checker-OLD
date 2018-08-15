@@ -1,0 +1,1 @@
+gcc main.c -I /usr/include/python3.7m -L /usr/lib -l python3.7m -o main.k
