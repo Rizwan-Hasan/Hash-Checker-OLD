@@ -15,8 +15,9 @@ from HashChecker import checkHash
 from about import AboutWindow
 
 # PyQt5 Imports
+import sip
 import PyQt5
-from PyQt5 import uic, sip
+from PyQt5 import uic
 from PyQt5 import QtGui
 from PyQt5.QtGui import QIcon, QPixmap, QMovie
 from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox, QLabel, QPushButton
